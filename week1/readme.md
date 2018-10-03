@@ -61,4 +61,4 @@ void setup() {
 }
 ```
 *put your answer here*
-answer : 3 - go funciton approached the variable in class and changed the variable;
+answer : 3 - go funciton approached the variable a in object(thing) and changed the variable a of the object(thing);
