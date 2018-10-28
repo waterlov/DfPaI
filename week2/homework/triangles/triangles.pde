@@ -1,3 +1,29 @@
+//Rotate each triangle so it faces towards the mouse.
+
+ArrayList<Triangle> friends = new ArrayList<Triangle>();
+
+void setup() {
+  size(500, 500);
+
+  int N = 12;
+  int spacing = width / (N + 1);
+  for (int i = -1; i <= N; i++) {
+    for (int j = -1; j <= N; j++) {
+      friends.add(new Triangle( i * spacing + spacing, j * spacing + spacing ));
+    }
+  }
+}
+
+void draw() {
+  background(0);
+
+  for (Triangle t : friends) {
+    t.draw();
+    t.rotation=2*PI-atan2((t.pos.x-mouseX), (t.pos.y-mouseY));
+    t.update();
+  }
+}
+
 
 class Triangle {
   PVector pos;
@@ -9,39 +35,13 @@ class Triangle {
   }
 
   void draw() {
-    stroke(255, 0, 120);
     pushMatrix();
     translate(pos.x, pos.y);
     rotate(rotation);
-    scale(2, 2);
+    scale(7-map(dist(pos.x, pos.y, mouseX, mouseY), 0, dist(0, 0, width, height), 1, 7));
     triangle(-5, 2, 5, 2, 0, -10);
     popMatrix();
   }
-}
-
-ArrayList<Triangle> friends = new ArrayList<Triangle>();
-
-void setup() {
-  size(500, 500);
-
-  int N = 10;
-  int spacing = width / (N + 1);
-  for (int i = 0; i < N; i++) {
-    for (int j = 0; j < N; j++) {
-      friends.add(new Triangle( i * spacing + spacing, j * spacing + spacing ));
-    }
-  }
-}
-
-void draw() {
-  background(0);
-
-  for (Triangle t : friends) {
-    t.draw();
-    if (t.pos.y>=mouseY) {
-      t.rotation=-atan((t.pos.x-mouseX)/(t.pos.y-mouseY));
-    } else {
-      t.rotation=PI-atan((t.pos.x-mouseX)/(t.pos.y-mouseY));
-    }
+  void update() {
   }
 }

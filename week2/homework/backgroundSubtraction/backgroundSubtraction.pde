@@ -3,8 +3,6 @@ Capture capture;
 PImage background;
 PImage PreCap;
 float threshold=20;
-int[] poschk;
-
 
 void setup() {
   size(640, 480);
@@ -12,24 +10,22 @@ void setup() {
   capture.start();
   PreCap=createImage(width, height, RGB);
   background=loadImage("sea.jpg");
-  poschk=new int[width*height];
 }
 
-int tick=0;
+int mode=0;
 void draw() { 
   noStroke();
   if (capture.available()) {
-    tick=frameCount/60;
-    //println(tick);
-    if (tick>2) {
-      start_action();
-    } else {
+    if (mode==0) {
       init_record();
+    } else {//afer pressing any key, background subtraction start
+      start_action();
     }
   }
 }
 
 void init_record() {
+  //init recording from cam
   capture.read();
   loadPixels();
   int loc=0;
@@ -43,6 +39,18 @@ void init_record() {
   updatePixels();
   PreCap.copy(capture, 0, 0, width, height, 0, 0, width, height);
   PreCap.updatePixels();
+
+  //init backgound img drawing
+  background.loadPixels();
+  loadPixels();
+  loc=0;
+  for (int y = 0; y < height; y+=1) {
+    for (int x = 0; x < width; x+=1) {
+      pixels[loc]=color(background.get(x, y));
+      loc++;
+    }
+  }
+  updatePixels();
 }
 
 void start_action() {
@@ -62,13 +70,15 @@ void start_action() {
       float diff=abs(r1-r2);
       if (diff>threshold) {
         pixels[loc]=color(now_col);
-        poschk[loc]=1;
       } else {
         pixels[loc]=color(background.get(x, y));
-        poschk[loc]=0;
       }
       loc++;
     }
   }
   updatePixels();
+}
+
+void keyPressed() {
+  mode=1;
 }

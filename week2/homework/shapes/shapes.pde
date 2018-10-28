@@ -2,7 +2,7 @@ PVector[] v1, v2;
 float r_ang, r_sp; //for spinning
 float sz, szPhi; //size
 
-float sc=0, tsc=1;//for scaling
+float sc=0, tsc=1.1;//for scaling
 int modechk=1;
 
 void setup() {
@@ -31,6 +31,7 @@ void setup() {
   rotateY(r_ang);
   //draw shapes
   for (int i=0; i<8; i++) {
+    //for (int j=i+1; j<8; j++) {
     for (int j=0; j<8; j++) {
       if (dist(v1[i].x, v1[i].y, v1[i].z, v1[j].x, v1[j].y, v1[j].z) == sz*2) {
         for (int n=0; n<10; n++) {
@@ -39,10 +40,14 @@ void setup() {
       }
     }
   }
-
+  // println("++++++++");
   for (int i=0; i<12; i++) {
+    //println("---------------");
+    // for (int j=i+1; j<12; j++) {//overlapping get better result
     for (int j=0; j<12; j++) {
+      println(dist(v2[i].x, v2[i].y, v2[i].z, v2[j].x, v2[j].y, v2[j].z));
       if (int(dist(v2[i].x, v2[i].y, v2[i].z, v2[j].x, v2[j].y, v2[j].z)) == floor(sz*2)) {
+
         for (int n=0; n<10; n++) {
           drawMovingBox(v2[i], v2[j], -1);
         }
@@ -55,15 +60,15 @@ void draw() {
   background(30);
 
   translate(width / 2, height / 2, 0);
-  rotateX(1);
+  rotateX(radians(mouseX));
   rotateY(r_ang);
 
   //for scaling
-  sc=sc+(tsc-sc)*0.03;
-  if (sc<0.01) {
+  sc=sc+(tsc-sc)*0.05;
+  if (sc<0.05) {
     tsc=1;
     modechk*=-1;
-  } else if (sc>0.99) {
+  } else if (sc>0.999) {
     tsc=0;
   }
   scale(sc);
